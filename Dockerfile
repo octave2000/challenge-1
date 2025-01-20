@@ -1,34 +1,31 @@
 
-FROM bun as build
+FROM node:18-alpine as build
 
 
 WORKDIR /app
 
 
-COPY package.json bun.lockb tsconfig.json ./
+COPY package.json package-lock.json tsconfig.json ./
 
 
-RUN bun install
+RUN npm install
 
 
 COPY src ./src
 
 
-RUN bun run build
+RUN npx tsc
 
 
 FROM node:18-alpine as production
 
+
 WORKDIR /app
 
-
 COPY --from=build /app /app
-
-
-RUN curl -fsSL https://bun.sh/install | bash
 
 
 EXPOSE 3000
 
 
-CMD ["bun", "src/index.ts"]
+CMD ["node", "dist/index.js"]
