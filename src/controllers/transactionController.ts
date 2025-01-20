@@ -67,9 +67,9 @@ export const setBudget = async (req: Request, res: Response) => {
 };
 
 
-export const getBudgetStatus = async (req: Request, res: Response)=> {
+export const getBudgetStatus = async (req: Request, res: Response) : Promise<any>=> {
     try {
-      const budget = await Budget.findOne();
+      const budget = await Budget.findById({_id:req.params.id});
       if (!budget) return res.status(404).json({ message: 'Budget not set.' });
   
       const isExceeded = budget.totalSpent > budget.limit;

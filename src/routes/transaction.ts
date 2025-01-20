@@ -14,7 +14,7 @@ router.post('/transactions', addTransaction);
 router.get('/transactions', getTransactions);
 router.get('/transactions/report', generateReport);
 router.post('/budget', setBudget);
-router.get('/budget/status', getBudgetStatus);
+router.get('/budget/status',  getBudgetStatus);
 router.get('/transactions/summary', summaryData);
 
 export default router;
