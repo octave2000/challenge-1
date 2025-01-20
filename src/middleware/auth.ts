@@ -1,9 +1,9 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "jsonwebtoken";
-import ErrorHandler from "../src/utils/ErrorHandler";
+import ErrorHandler from "../utils/ErrorHandler";
 import catchAsyncErrors from "./catchAsyncErrors";
-import User from "../src/models/user";
+import User from "../models/user";
 
 declare global {
   namespace Express {

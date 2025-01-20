@@ -2,6 +2,10 @@
   "name": "challenge-1",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "build": "bun build",
+    "start": "bun run start"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/express": "^5.0.0",
