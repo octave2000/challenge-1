@@ -30,8 +30,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Transaction'
-  
+                  $ref: "#/components/schemas/Transaction"
+
   /api/v1/transactions/update/{id}:
     post:
       summary: Update a transaction by ID
@@ -53,7 +53,7 @@ paths:
                   message:
                     type: string
                     example: Transaction updated successfully
-  
+
   /api/v1/transactions/delete/{id}:
     post:
       summary: Delete a transaction by ID
@@ -107,6 +107,18 @@ paths:
                   message:
                     type: string
                     example: Budget set successfully
+    get:
+      summary: List all budgets
+      operationId: listBudget
+      responses:
+        200:
+          description: A list of budgets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Budget"
 
   /api/v1/budget/status:
     get:
@@ -123,20 +135,6 @@ paths:
                   status:
                     type: string
                     example: Budget is on track
-
-  /api/v1/budget:
-    get:
-      summary: List all budgets
-      operationId: listBudget
-      responses:
-        200:
-          description: A list of budgets
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Budget'
 
   /api/v1/transactions/summary:
     get:
@@ -166,9 +164,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Category'
-
-  /api/v1/categories:
+                  $ref: "#/components/schemas/Category"
     post:
       summary: Create a new category
       operationId: createCategory
@@ -248,7 +244,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
 
   /api/v1/logout:
     get:
@@ -302,35 +298,119 @@ components:
   schemas:
     Transaction:
       type: object
+      required:
+        - name
+        - user_id
+        - type
+        - amount
+        - account
+        - category
       properties:
-        id:
-          type: string
-        amount:
-          type: number
-        description:
-          type: string
-    Budget:
-      type: object
-      properties:
-        id:
-          type: string
-        amount:
-          type: number
-        status:
-          type: string
-    Category:
-      type: object
-      properties:
-        id:
-          type: string
         name:
           type: string
+          description: The name of the transaction (e.g., "Lunch", "Salary")
+        user_id:
+          type: string
+          format: objectId
+          description: The unique identifier for the user associated with the transaction
+        type:
+          type: string
+          enum:
+            - expense
+            - money in
+          description: The type of transaction (either "expense" or "money in")
+        budget_id:
+          type: string
+          format: objectId
+          description: Optional reference to the associated budget
+        amount:
+          type: number
+          format: float
+          description: The amount of money involved in the transaction
+        account:
+          type: string
+          enum:
+            - bank
+            - mobile money
+          description: The type of account for the transaction
+        category:
+          type: string
+          format: objectId
+          description: The category associated with the transaction
+        subcategory:
+          type: string
+          format: objectId
+          description: Optional subcategory reference
+        date:
+          type: string
+          format: date-time
+          description: The date when the transaction was created, defaults to the current date
+    Budget:
+      type: object
+      required:
+        - name
+        - user_id
+        - limit
+      properties:
+        name:
+          type: string
+          description: The name of the budget (e.g., "Monthly Budget", "Vacation Fund")
+        user_id:
+          type: string
+          format: objectId
+          description: The unique identifier of the user associated with the budget
+        limit:
+          type: number
+          format: float
+          description: The spending limit for the budget
+        totalSpent:
+          type: number
+          format: float
+          description: The amount spent so far from the budget, default is 0
+    Category:
+      type: object
+      required:
+        - name
+        - user_id
+      properties:
+        name:
+          type: string
+          description: The name of the category (e.g., "Groceries", "Entertainment")
+        user_id:
+          type: string
+          format: objectId
+          description: The unique identifier of the user who owns the category
+        parentId:
+          type: string
+          format: objectId
+          description: The optional parent category to form a hierarchical structure (null if no parent)
     User:
       type: object
+      required:
+        - name
+        - email
+        - password
       properties:
-        id:
+        name:
           type: string
-        username:
-          type: string
+          description: The name of the user
         email:
           type: string
+          description: The email of the user
+        password:
+          type: string
+          description: The user's password (hashed before saving)
+        phoneNumber:
+          type: integer
+          description: The phone number of the user (optional)
+        createdAt:
+          type: string
+          format: date-time
+          description: The time when the user was created
+        resetPasswordToken:
+          type: string
+          description: Token for password reset (optional)
+        resetPasswordTime:
+          type: string
+          format: date-time
+          description: Time when the reset password token was generated (optional)
