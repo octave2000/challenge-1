@@ -9,6 +9,8 @@ export const addTransaction = async (req: Request, res: Response) => {
     const { type, amount, account, category, subcategory, budget_id } =
       req.body;
 
+    const user = req.user;
+    const user_id = user._id;
     let findCategory = await Category.findOne({
       name: subcategory ? subcategory : category,
     });
@@ -39,6 +41,7 @@ export const addTransaction = async (req: Request, res: Response) => {
     const transaction = new Transaction({
       type,
       amount,
+      user_id,
       account,
       category: subcategory ? findCategory.parentId : findCategory._id, // Ensure proper reference
       subcategory: findCategory._id,
