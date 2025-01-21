@@ -15,7 +15,12 @@ declare global {
 
 export const isAuthenticated = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    const { token } = req.cookies || req.headers.authorization?.split(" ")[1];
+    let token;
+    if (req.cookies && req.cookies.token) {
+      token = req.cookies.token;
+    } else if (req.headers.authorization) {
+      token = req.headers.authorization.split(" ")[1];
+    }
 
     if (!token) {
       return next(new ErrorHandler("Please login to continue", 401));
