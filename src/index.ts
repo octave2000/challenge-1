@@ -5,6 +5,7 @@ import connectDB from "./config/db";
 import transactionRoutes from "./routes/transaction";
 import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
+import path from "path";
 
 dotenv.config();
 connectDB();
@@ -13,7 +14,9 @@ const app = express();
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-const swaggerDocument = YAML.load("./docs/swagger/swagger.yaml");
+const swaggerDocument = YAML.load(
+  path.join(__dirname, "docs", "swagger", "swagger.yaml")
+);
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api", transactionRoutes);
 
