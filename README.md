@@ -1,161 +1,222 @@
-# Budget and Transaction Management API
+# My API Documentation
 
-## Overview
+Welcome to the API documentation for My App! This document will guide you through the available endpoints and provide examples for interacting with the API. If you'd like to explore the API in an interactive format, you can access the Swagger UI at the URL below:
 
-This API provides endpoints for managing transactions, categories, and budgets. It supports operations like adding, updating, and deleting transactions, managing categories, generating reports, and tracking budget status.
-
-## Endpoints
-
-### **1. Add Transaction**
-
-- **Endpoint**: `POST /transactions`
-- **Description**: Adds a new transaction. If a category or subcategory does not exist, it is created.
-- **Request Body**:
-  ```json
-  {
-    "type": "income/expense",
-    "amount": number,
-    "account": string,
-    "category": string,
-    "subcategory": string,
-    "budget_id": string
-  }
-  ```
-- **Response**: The newly created transaction.
+**Swagger UI**: [https://your-api-url.com/swagger](https://your-api-url.com/swagger)
 
 ---
 
-### **2. Update Transaction**
+## API Endpoints
 
-- **Endpoint**: `PUT /transactions/:id`
-- **Description**: Updates an existing transaction by ID.
-- **Request Body**:
-  ```json
-  {
-    "type": "income/expense",
-    "amount": number,
-    "account": string,
-    "category": string,
-    "subcategory": string,
-    "budget_id": string
-  }
-  ```
-- **Response**: The updated transaction.
+### /api/v1/transactions
 
----
+- **POST**: Add a new transaction
 
-### **3. Delete Transaction**
+  - Request Body:
+    - `name` (string): Name of the transaction (e.g., "Lunch", "Salary")
+    - `user_id` (string): The user associated with the transaction
+    - `type` (string): Type of the transaction ("expense" or "money in")
+    - `amount` (number): Amount of the transaction
+    - `account` (string): Type of account (bank or mobile money)
+    - `category` (string): Category of the transaction
+  - Response:
+    - **201**: Transaction added successfully
 
-- **Endpoint**: `DELETE /transactions/:id`
-- **Description**: Deletes a transaction by ID.
-- **Response**: Success or failure message.
+- **GET**: Get a list of transactions
+  - Response:
+    - **200**: List of transactions
 
 ---
 
-### **4. Get Transactions**
+### /api/v1/transactions/update/{id}
 
-- **Endpoint**: `GET /transactions`
-- **Description**: Retrieves all transactions, supports filtering by query parameters.
-- **Response**: List of transactions.
-
----
-
-### **5. Generate Report**
-
-- **Endpoint**: `GET /transactions/report`
-- **Description**: Generates a report for transactions within a specific date range.
-- **Query Parameters**:
-  - `startDate`: Start date (ISO 8601 format).
-  - `endDate`: End date (ISO 8601 format).
-- **Response**: List of transactions within the date range.
+- **POST**: Update a transaction by ID
+  - Parameters:
+    - `id` (string): ID of the transaction to be updated
+  - Response:
+    - **200**: Transaction updated successfully
 
 ---
 
-### **6. Set Budget**
+### /api/v1/transactions/delete/{id}
 
-- **Endpoint**: `POST /budgets`
-- **Description**: Creates a new budget with a specified limit.
-- **Request Body**:
-  ```json
-  {
-    "name": "string",
-    "limit": number
-  }
-  ```
-- **Response**: The newly created budget.
+- **POST**: Delete a transaction by ID
+  - Parameters:
+    - `id` (string): ID of the transaction to be deleted
+  - Response:
+    - **200**: Transaction deleted successfully
 
 ---
 
-### **7. Get Budget Status**
+### /api/v1/transactions/report
 
-- **Endpoint**: `GET /budgets/status`
-- **Description**: Retrieves the current status of a budget, including total spent and whether the limit has been exceeded.
-- **Request Body**:
-  ```json
-  {
-    "id": "string"
-  }
-  ```
-- **Response**: Budget status, including whether the budget has been exceeded.
+- **GET**: Generate a transaction report
+  - Response:
+    - **200**: Transaction report generated
 
 ---
 
-### **8. Summary Data**
+### /api/v1/budget
 
-- **Endpoint**: `GET /transactions/summary`
-- **Description**: Retrieves a summary of transactions, grouped by category, account, or other criteria.
-- **Query Parameters**:
-  - `groupBy`: Field to group by (default: `category`).
-  - `filterKey`: Optional filter key.
-  - `filterValue`: Optional filter value.
-- **Response**: Aggregated transaction data.
+- **POST**: Set a budget
 
----
+  - Request Body:
+    - `name` (string): Name of the budget (e.g., "Monthly Budget", "Vacation Fund")
+    - `user_id` (string): The user associated with the budget
+    - `limit` (number): Spending limit for the budget
+  - Response:
+    - **201**: Budget set successfully
 
-### **9. Create Category**
-
-- **Endpoint**: `POST /categories`
-- **Description**: Creates a new category.
-- **Request Body**:
-  ```json
-  {
-    "name": "string",
-    "parentId": "string (optional)"
-  }
-  ```
-- **Response**: The newly created category.
+- **GET**: List all budgets
+  - Response:
+    - **200**: List of budgets
 
 ---
 
-### **10. Update Category**
+### /api/v1/budget/status
 
-- **Endpoint**: `PUT /categories/:id`
-- **Description**: Updates an existing category by ID.
-- **Request Body**:
-  ```json
-  {
-    "name": "string",
-    "parentId": "string (optional)"
-  }
-  ```
-- **Response**: The updated category.
+- **GET**: Get current budget status
+  - Response:
+    - **200**: Current budget status
 
 ---
 
-### **11. Delete Category**
+### /api/v1/transactions/summary
 
-- **Endpoint**: `DELETE /categories/:id`
-- **Description**: Deletes a category by ID.
-- **Response**: Success or failure message.
+- **GET**: Get transaction summary
+  - Response:
+    - **200**: Summary data
 
 ---
 
-## Error Handling
+### /api/v1/categories
 
-- **Status Code 500**: For unexpected errors.
-- **Status Code 404**: When a resource (e.g., transaction, category) is not found.
+- **GET**: List all categories
 
-## Notes
+  - Response:
+    - **200**: List of categories
 
-- Ensure proper references are maintained when adding or updating transactions related to categories.
-- Budget tracking for expenses ensures that the total spent does not exceed the set limit.
+- **POST**: Create a new category
+  - Request Body:
+    - `name` (string): Name of the category (e.g., "Groceries", "Entertainment")
+    - `user_id` (string): The user associated with the category
+  - Response:
+    - **201**: Category created successfully
+
+---
+
+### /api/v1/categories/delete/{id}
+
+- **POST**: Delete a category by ID
+  - Parameters:
+    - `id` (string): ID of the category to be deleted
+  - Response:
+    - **200**: Category deleted successfully
+
+---
+
+### /api/v1/register
+
+- **POST**: Register a new user
+  - Request Body:
+    - `name` (string): The user's name
+    - `email` (string): The user's email
+    - `password` (string): The user's password (hashed before saving)
+  - Response:
+    - **201**: User registered successfully
+
+---
+
+### /api/v1/login
+
+- **POST**: User login
+  - Request Body:
+    - `email` (string): The user's email
+    - `password` (string): The user's password
+  - Response:
+    - **200**: Login successful
+    - **Response Body**: `token`: JWT Token for authentication
+
+---
+
+### /api/v1/me
+
+- **GET**: Get current logged-in user's information
+  - Response:
+    - **200**: User information
+
+---
+
+### /api/v1/logout
+
+- **GET**: Log out the current user
+  - Response:
+    - **200**: User logged out successfully
+
+---
+
+### /api/v1/update
+
+- **PUT**: Update user information
+  - Request Body:
+    - `name` (string): Updated name of the user
+    - `email` (string): Updated email of the user
+  - Response:
+    - **200**: User information updated successfully
+
+---
+
+### /api/v1/password/update
+
+- **PUT**: Update user password
+  - Request Body:
+    - `password` (string): Updated password (hashed before saving)
+  - Response:
+    - **200**: Password updated successfully
+
+---
+
+## Schema Definitions
+
+### Transaction
+
+- `name`: The name of the transaction
+- `user_id`: The unique identifier for the user associated with the transaction
+- `type`: The type of transaction ("expense" or "money in")
+- `amount`: The amount of money involved in the transaction
+- `account`: Type of account ("bank" or "mobile money")
+- `category`: The category associated with the transaction
+- `subcategory`: Optional subcategory reference
+- `date`: The date when the transaction was created
+
+### Budget
+
+- `name`: The name of the budget
+- `user_id`: The unique identifier of the user associated with the budget
+- `limit`: The spending limit for the budget
+- `totalSpent`: The amount spent so far from the budget
+
+### Category
+
+- `name`: The name of the category
+- `user_id`: The unique identifier of the user who owns the category
+- `parentId`: The optional parent category to form a hierarchical structure
+
+### User
+
+- `name`: The name of the user
+- `email`: The email of the user
+- `password`: The user's password
+- `phoneNumber`: The user's phone number (optional)
+- `createdAt`: The creation time of the user
+- `resetPasswordToken`: Optional token for password reset
+- `resetPasswordTime`: Time when the reset password token was generated
+
+---
+
+### Note
+
+You can access the interactive API documentation via **Swagger UI** at:  
+[https://your-api-url.com/swagger](https://your-api-url.com/swagger)
+
+Feel free to explore the API with the help of the above documentation!
