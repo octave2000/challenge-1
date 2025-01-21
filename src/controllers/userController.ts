@@ -69,7 +69,7 @@ export const loginUser = catchAsyncErrors(
 export const loadUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await User.findById(req.user.id);
+      const user = await User.findById(req.user._id);
 
       if (!user) {
         return next(new ErrorHandler("User not found", 400));
@@ -149,7 +149,7 @@ export const updateUserInfo = catchAsyncErrors(
 export const updateUserPassword = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await User.findById(req.user.id).select("+password");
+      const user = await User.findById(req.user._id).select("+password");
 
       if (!user) {
         return next(new ErrorHandler("User not found", 404));

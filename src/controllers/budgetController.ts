@@ -5,10 +5,26 @@ import Budget from "../models/Budget";
 export const setBudget = async (req: Request, res: Response) => {
   try {
     const { name, limit } = req.body;
-
-    const budget = new Budget({ name, limit });
+    const user = req.user;
+    const user_id = user._id;
+    const budget = new Budget({ name, limit, user_id });
     const savedBudget = await budget.save();
     res.status(201).json(savedBudget);
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unexpected error.",
+    });
+  }
+};
+
+export const listBudget = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const user_id = user._id;
+    const categories = await Budget.find({ user_id });
+    res
+      .status(200)
+      .json({ message: "budget retrived succesfully", categories });
   } catch (error) {
     res.status(500).json({
       message: error instanceof Error ? error.message : "Unexpected error.",

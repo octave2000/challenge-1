@@ -4,9 +4,11 @@ import type { Request, Response } from "express";
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const { name, parentId } = req.body;
-
+    const user = req.user;
+    const user_id = user._id;
     const category = new Category({
       name,
+      user_id,
       parentId: parentId || null,
     });
 
@@ -21,7 +23,9 @@ export const createCategory = async (req: Request, res: Response) => {
 
 export const listCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await Category.find();
+    const user = req.user;
+    const user_id = user._id;
+    const categories = await Category.find({ user_id });
     res
       .status(200)
       .json({ message: "categories retrived succesfully", categories });

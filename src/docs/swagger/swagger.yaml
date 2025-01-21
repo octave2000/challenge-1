@@ -1,0 +1,336 @@
+openapi: 3.0.0
+info:
+  title: My API
+  description: API documentation for my app
+  version: 1.0.0
+paths:
+  /api/v1/transactions:
+    post:
+      summary: Add a new transaction
+      operationId: addTransaction
+      responses:
+        201:
+          description: Transaction added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction added successfully
+    get:
+      summary: Get a list of transactions
+      operationId: getTransactions
+      responses:
+        200:
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  
+  /api/v1/transactions/update/{id}:
+    post:
+      summary: Update a transaction by ID
+      operationId: updateTransactionById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transaction updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction updated successfully
+  
+  /api/v1/transactions/delete/{id}:
+    post:
+      summary: Delete a transaction by ID
+      operationId: deleteTransactionById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Transaction deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Transaction deleted successfully
+
+  /api/v1/transactions/report:
+    get:
+      summary: Generate a transaction report
+      operationId: generateReport
+      responses:
+        200:
+          description: Transaction report generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  report:
+                    type: string
+                    example: Report data
+
+  /api/v1/budget:
+    post:
+      summary: Set a budget
+      operationId: setBudget
+      responses:
+        201:
+          description: Budget set successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Budget set successfully
+
+  /api/v1/budget/status:
+    get:
+      summary: Get budget status
+      operationId: getBudgetStatus
+      responses:
+        200:
+          description: Current budget status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: Budget is on track
+
+  /api/v1/budget:
+    get:
+      summary: List all budgets
+      operationId: listBudget
+      responses:
+        200:
+          description: A list of budgets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Budget'
+
+  /api/v1/transactions/summary:
+    get:
+      summary: Get transaction summary
+      operationId: summaryData
+      responses:
+        200:
+          description: Summary data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  summary:
+                    type: string
+                    example: Transaction summary data
+
+  /api/v1/categories:
+    get:
+      summary: List all categories
+      operationId: listCategories
+      responses:
+        200:
+          description: A list of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+
+  /api/v1/categories:
+    post:
+      summary: Create a new category
+      operationId: createCategory
+      responses:
+        201:
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Category created successfully
+
+  /api/v1/categories/delete/{id}:
+    post:
+      summary: Delete a category by ID
+      operationId: deleteCategoryById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Category deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Category deleted successfully
+
+  /api/v1/register:
+    post:
+      summary: Register a new user
+      operationId: createUser
+      responses:
+        201:
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User registered successfully
+
+  /api/v1/login:
+    post:
+      summary: User login
+      operationId: loginUser
+      responses:
+        200:
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "JWT_Token"
+
+  /api/v1/me:
+    get:
+      summary: Get current logged-in user's information
+      operationId: loadUser
+      responses:
+        200:
+          description: User information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /api/v1/logout:
+    get:
+      summary: Log out the current user
+      operationId: logoutUser
+      responses:
+        200:
+          description: User logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User logged out successfully
+
+  /api/v1/update:
+    put:
+      summary: Update user information
+      operationId: updateUserInfo
+      responses:
+        200:
+          description: User information updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User information updated successfully
+
+  /api/v1/password/update:
+    put:
+      summary: Update user password
+      operationId: updateUserPassword
+      responses:
+        200:
+          description: Password updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Password updated successfully
+
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        description:
+          type: string
+    Budget:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        status:
+          type: string
+    Category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string

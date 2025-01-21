@@ -23,7 +23,11 @@ import {
   deleteCategoryById,
   listCategories,
 } from "../controllers/categoryController";
-import { getBudgetStatus, setBudget } from "../controllers/budgetController";
+import {
+  getBudgetStatus,
+  listBudget,
+  setBudget,
+} from "../controllers/budgetController";
 import { isAuthenticated } from "../middleware/auth";
 
 const router = Router();
@@ -35,6 +39,7 @@ router.post("/transactions/delete/:id", isAuthenticated, deleteTransactionById);
 router.get("/transactions/report", isAuthenticated, generateReport);
 router.post("/budget", isAuthenticated, setBudget);
 router.get("/budget/status", isAuthenticated, getBudgetStatus);
+router.get("/budget", isAuthenticated, listBudget);
 router.get("/transactions/summary", isAuthenticated, summaryData);
 router.get("/categories", isAuthenticated, listCategories);
 router.post("/categories", isAuthenticated, createCategory);

@@ -147,7 +147,9 @@ export const deleteTransactionById = async (
 
 export const getTransactions = async (req: Request, res: Response) => {
   try {
-    const query = req.query;
+    const user = req.user;
+    const userid = user._id;
+    const query = { ...req.query, user_id: userid };
 
     const transactions = await Transaction.find(query);
     res.status(200).json(transactions);
@@ -161,7 +163,10 @@ export const getTransactions = async (req: Request, res: Response) => {
 export const generateReport = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.query;
+    const user = req.user;
+    const userid = user._id;
     const transactions = await Transaction.find({
+      user_id: userid,
       date: {
         $gte: new Date(startDate as string),
         $lte: new Date(endDate as string),
@@ -180,6 +185,8 @@ export const summaryData = async (req: Request, res: Response) => {
     const groupBy = (req.query.groupBy as string) || "category";
     const filterKey = req.query.filterKey as string;
     const filterValue = req.query.filterValue as string;
+    const user = req.user;
+    const userid = user._id;
 
     const groupFields: Record<string, any> = {
       category: { category: "$category" },
@@ -193,6 +200,9 @@ export const summaryData = async (req: Request, res: Response) => {
     const groupingField = groupFields[groupBy] || groupFields.category;
 
     const aggregationPipeline = [];
+    aggregationPipeline.push({
+      $match: { user_id: userid },
+    });
 
     if (filterKey && filterValue) {
       aggregationPipeline.push({
