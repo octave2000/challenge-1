@@ -6,7 +6,7 @@ import sendMail from "../utils/sendMail";
 
 export const addTransaction = async (req: Request, res: Response) => {
   try {
-    const { type, amount, account, category, subcategory, budget_id } =
+    const { name, type, amount, account, category, subcategory, budget_id } =
       req.body;
 
     const user = req.user;
@@ -39,6 +39,7 @@ export const addTransaction = async (req: Request, res: Response) => {
     }
 
     const transaction = new Transaction({
+      name,
       type,
       amount,
       user_id,
